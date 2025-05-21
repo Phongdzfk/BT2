@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê - Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .sidebar .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+        .sidebar .logo-container h3 {
+            color: white;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .sidebar .nav-pills > li > a {
+            color: white;
+            border-radius: 0;
+            padding: 15px 20px;
+        }
+        .sidebar .nav-pills > li.active > a,
+        .sidebar .nav-pills > li.active > a:hover,
+        .sidebar .nav-pills > li.active > a:focus {
+            background-color: #34495e;
+        }
+        .sidebar .nav-pills > li > a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-card i {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .stat-card h3 {
+            margin: 15px 0;
+            font-size: 28px;
+        }
+        .stat-card p {
+            color: #666;
+            margin: 0;
+            font-size: 16px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 400px;
+        }
+        .chart-container h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .filter-bar {
+            margin-bottom: 20px;
+        }
+        .filter-bar .form-group {
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="Logo" class="img-responsive">
+                    <h3>Hệ thống quản lý KTX</h3>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Bảng Điều Khiển</a></li>
+                    <li><a href="rooms.html"><i class="fas fa-door-open"></i> Quản lý phòng</a></li>
+                    <li><a href="students.html"><i class="fas fa-user-graduate"></i> Quản lý sinh viên</a></li>
+                    <li><a href="requests.html"><i class="fas fa-tools"></i> Quản lý yêu cầu</a></li>
+                    <li><a href="bills.html"><i class="fas fa-file-invoice-dollar"></i> Quản lý hóa đơn</a></li>
+                    <li class="active"><a href="statistics.html"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Đến trang chủ</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="page-header">
+                    <h2>Thống Kê</h2>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="row filter-bar">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="timeFilter">Thời gian:</label>
+                                    <select class="form-control" id="timeFilter">
+                                        <option value="week">Tuần này</option>
+                                        <option value="month">Tháng này</option>
+                                        <option value="year">Năm nay</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="buildingFilter">Tòa nhà:</label>
+                                    <select class="form-control" id="buildingFilter">
+                                        <option value="">Tất cả</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-default">Lọc</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-door-open text-primary"></i>
+                            <h3 id="totalRooms">...</h3>
+                            <p>Tổng số phòng</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-user-graduate text-success"></i>
+                            <h3 id="totalStudents">...</h3>
+                            <p>Sinh viên đang ở</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-file-invoice-dollar text-info"></i>
+                            <h3 id="totalRevenue">...</h3>
+                            <p>Doanh thu</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <i class="fas fa-tools text-warning"></i>
+                            <h3 id="totalRequests">...</h3>
+                            <p>Yêu cầu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h4>Doanh thu theo tháng</h4>
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h4>Phân bố yêu cầu</h4>
+                            <canvas id="requestChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    $(document).ready(function() {
+        loadStatistics();
+        loadBuildings();
+        
+        // Load lại thống kê khi thay đổi bộ lọc
+        $('#timeFilter, #buildingFilter').change(function() {
+            loadStatistics();
+        });
+    });
+
+    function loadStatistics() {
+        const timeFilter = $('#timeFilter').val();
+        const buildingFilter = $('#buildingFilter').val();
+
+        $.get('api/statistics.php', {
+            time_filter: timeFilter,
+            building_filter: buildingFilter
+        }, function(res) {
+            if(res.success) {
+                // Cập nhật các số liệu thống kê
+                $('#totalRooms').text(res.data.rooms.total_rooms);
+                $('#totalStudents').text(res.data.students.total_students);
+                $('#totalRevenue').text(formatMoney(res.data.revenue.total_revenue));
+                $('#totalRequests').text(res.data.requests.total_requests);
+
+                // Biểu đồ doanh thu theo tháng
+                const revenueLabels = res.data.monthly_revenue.map(item => item.month);
+                const revenueData = res.data.monthly_revenue.map(item => item.revenue);
+                const unpaidData = res.data.monthly_revenue.map(item => item.unpaid_revenue);
+                const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+                new Chart(revenueCtx, {
+                    type: 'line',
+                    data: {
+                        labels: revenueLabels,
+                        datasets: [
+                            {
+                                label: 'Doanh thu tổng',
+                                data: revenueData,
+                                borderColor: 'rgb(75, 192, 192)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Doanh thu chưa trả',
+                                data: unpaidData,
+                                borderColor: 'rgb(255, 99, 132)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+
+                // Biểu đồ phân bố loại yêu cầu
+                const requestLabels = res.data.request_types.map(item => item.loai_yeu_cau);
+                const requestData = res.data.request_types.map(item => item.count);
+                const requestCtx = document.getElementById('requestChart').getContext('2d');
+                new Chart(requestCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: requestLabels,
+                        datasets: [{
+                            data: requestData,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        });
+    }
+
+    function loadBuildings() {
+        $.get('api/list_ktx.php', function(res) {
+            if(res.success) {
+                let html = '<option value="">Tất cả</option>';
+                res.data.forEach(function(ktx) {
+                    html += `<option value="${ktx.ma_ktx}">${ktx.ten_ktx}</option>`;
+                });
+                $('#buildingFilter').html(html);
+            }
+        });
+    }
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount);
+    }
+    </script>
+</body>
+</html> 

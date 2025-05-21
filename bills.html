@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Hóa Đơn - Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .sidebar .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+        .sidebar .logo-container h3 {
+            color: white;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .sidebar .nav-pills > li > a {
+            color: white;
+            border-radius: 0;
+            padding: 15px 20px;
+        }
+        .sidebar .nav-pills > li.active > a,
+        .sidebar .nav-pills > li.active > a:hover,
+        .sidebar .nav-pills > li.active > a:focus {
+            background-color: #34495e;
+        }
+        .sidebar .nav-pills > li > a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .bill-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .bill-status {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-chua-thanh-toan { background: #e74c3c; color: #fff; }
+        .status-da-thanh-toan { background: #2ecc71; color: #fff; }
+        .bill-actions { margin-top: 10px; }
+        .bill-actions .btn { margin-right: 5px; }
+        .filter-bar { margin-bottom: 20px; }
+        .badge-success {
+            background-color: #5cb85c !important;
+            color: #fff;
+        }
+        .badge-warning {
+            background-color: #f0ad4e !important;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="Logo" class="img-responsive">
+                    <h3>Hệ thống quản lý KTX</h3>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Bảng Điều Khiển</a></li>
+                    <li><a href="rooms.html"><i class="fas fa-door-open"></i> Quản lý phòng</a></li>
+                    <li><a href="students.html"><i class="fas fa-user-graduate"></i> Quản lý sinh viên</a></li>
+                    <li><a href="requests.html"><i class="fas fa-tools"></i> Quản lý yêu cầu</a></li>
+                    <li class="active"><a href="bills.html"><i class="fas fa-file-invoice-dollar"></i> Quản lý hóa đơn</a></li>
+                    <li><a href="statistics.html"><i class="fas fa-chart-bar"></i> Thống kê</a></li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Đến trang chủ</a></li>
+                </ul>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="page-header">
+                    <h2>Quản Lý Hóa Đơn</h2>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addBillModal">
+                        <i class="fas fa-plus"></i> Thêm Hóa Đơn
+                    </button>
+                </div>
+                <!-- Filter & Search -->
+                <div class="filter-section mb-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select class="form-control" id="statusFilter">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="chưa thanh toán">Chưa thanh toán</option>
+                                <option value="đã thanh toán">Đã thanh toán</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="studentFilter" placeholder="Nhập mã số sinh viên">
+                        </div>
+                    </div>
+                </div>
+                <!-- Bill List -->
+                <div class="row" id="billList">
+                    <!-- Danh sách hóa đơn sẽ được render động bằng AJAX tại đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Bill Modal -->
+    <div class="modal fade" id="addBillModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thêm hóa đơn mới</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBillForm">
+                        <div class="form-group">
+                            <label>Sinh viên</label>
+                            <select class="form-control" name="ma_sinh_vien" required>
+                                <option value="">Chọn sinh viên</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Số tiền</label>
+                            <input type="number" class="form-control" name="so_tien" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung</label>
+                            <textarea class="form-control" name="noi_dung" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hạn thanh toán</label>
+                            <input type="date" class="form-control" name="han_thanh_toan" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="addBill()">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Bill Modal -->
+    <div class="modal fade" id="editBillModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa hóa đơn</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editBillForm">
+                        <input type="hidden" name="ma_hoa_don">
+                        <div class="form-group">
+                            <label>Sinh viên</label>
+                            <select class="form-control" name="ma_sinh_vien" required>
+                                <option value="">Chọn sinh viên</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Số tiền</label>
+                            <input type="number" class="form-control" name="so_tien" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nội dung</label>
+                            <textarea class="form-control" name="noi_dung" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hạn thanh toán</label>
+                            <input type="date" class="form-control" name="han_thanh_toan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái</label>
+                            <select class="form-control" name="trang_thai" required>
+                                <option value="chưa thanh toán">Chưa thanh toán</option>
+                                <option value="đã thanh toán">Đã thanh toán</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editBill()">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        loadStudents();
+        loadBills();
+        $('#statusFilter, #studentFilter').on('input change', function() {
+            loadBills();
+        });
+        // Khi mở modal thêm hóa đơn, luôn load lại danh sách sinh viên cho form
+        $('#addBillModal').on('show.bs.modal', function() {
+            loadStudentsForForm();
+            $('#addBillForm')[0].reset();
+        });
+    });
+
+    function loadBills() {
+        const status = $('#statusFilter').val();
+        const maSoSinhVien = $('#studentFilter').val();
+        $.get('api/list_bills.php', {
+            trang_thai: status,
+            ma_so_sinh_vien: maSoSinhVien
+        }, function(response) {
+            let html = '';
+            if (response.success && response.data.length > 0) {
+                response.data.forEach(bill => {
+                    let statusClass = '';
+                    if (bill.trang_thai === 'đã thanh toán') statusClass = 'success';
+                    else statusClass = 'warning';
+                    let badgeClass = bill.trang_thai === 'đã thanh toán' ? 'badge-success' : 'badge-warning';
+                    html += `
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Hóa đơn #${bill.ma_hoa_don}</h5>
+                                    <p class="card-text">
+                                        <strong>Sinh viên:</strong> ${bill.ten_sinh_vien}<br>
+                                        <strong>Phòng:</strong> ${bill.ten_phong}<br>
+                                        <strong>Số tiền:</strong> ${formatMoney(bill.so_tien)}<br>
+                                        <strong>Nội dung:</strong> ${bill.noi_dung}<br>
+                                        <strong>Hạn thanh toán:</strong> ${formatDate(bill.han_thanh_toan)}<br>
+                                        <strong>Trạng thái:</strong> 
+                                        <span class="badge ${badgeClass}">${bill.trang_thai}</span><br>
+                                        <strong>Ngày tạo:</strong> ${formatDate(bill.ngay_tao)}
+                                    </p>
+                                    <div class="bill-actions">
+                                        <button class="btn btn-primary btn-sm" onclick="showEditModal(${bill.ma_hoa_don})">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+                                        <a href="api/export_bill_excel.php?id=${bill.ma_hoa_don}" class="btn btn-success btn-sm">
+                                            <i class="fas fa-file-excel"></i> Xuất Excel
+                                        </a>
+                                        <a href="api/export_bill_pdf.php?id=${bill.ma_hoa_don}" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-file-pdf"></i> Xuất PDF
+                                        </a>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteBill(${bill.ma_hoa_don})">
+                                            <i class="fas fa-trash"></i> Xóa
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html = '<div class="col-12"><p class="text-center">Không có hóa đơn nào</p></div>';
+            }
+            $('#billList').html(html);
+        });
+    }
+
+    function loadStudents() {
+        $.get('api/list_students.php', function(response) {
+            if (response.success) {
+                let htmlFilter = '<option value="">Tất cả sinh viên</option>';
+                let htmlForm = '<option value="">Chọn sinh viên</option>';
+                response.data.forEach(student => {
+                    htmlFilter += `<option value="${student.ma_sinh_vien}">${student.ho_ten}</option>`;
+                    htmlForm += `<option value="${student.ma_sinh_vien}">${student.ho_ten}</option>`;
+                });
+                $('#studentFilter').html(htmlFilter);
+                $('select[name="ma_sinh_vien"]').html(htmlForm);
+            }
+        });
+    }
+
+    function loadStudentsForForm() {
+        $.get('api/list_students.php', function(response) {
+            if (response.success) {
+                let htmlForm = '<option value="">Chọn sinh viên</option>';
+                response.data.forEach(student => {
+                    htmlForm += `<option value="${student.ma_sinh_vien}">${student.ho_ten}</option>`;
+                });
+                $('#addBillForm select[name="ma_sinh_vien"]').html(htmlForm);
+            }
+        });
+    }
+
+    function showEditModal(maHoaDon) {
+        $.get('api/get_bill.php', { ma_hoa_don: maHoaDon }, function(response) {
+            if (response.success) {
+                const bill = response.data;
+                $('#editBillForm input[name="ma_hoa_don"]').val(bill.ma_hoa_don);
+                $('#editBillForm select[name="ma_sinh_vien"]').val(bill.ma_sinh_vien);
+                $('#editBillForm input[name="so_tien"]').val(bill.so_tien);
+                $('#editBillForm textarea[name="noi_dung"]').val(bill.noi_dung);
+                $('#editBillForm input[name="han_thanh_toan"]').val(bill.han_thanh_toan);
+                $('#editBillForm select[name="trang_thai"]').val(bill.trang_thai);
+                $('#editBillModal').modal('show');
+            } else {
+                alert(response.message);
+            }
+        });
+    }
+
+    function addBill() {
+        const formData = new FormData($('#addBillForm')[0]);
+        $.ajax({
+            url: 'api/add_bill.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert('Thêm hóa đơn thành công');
+                    $('#addBillModal').modal('hide');
+                    loadBills();
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function editBill() {
+        const formData = new FormData($('#editBillForm')[0]);
+        $.ajax({
+            url: 'api/edit_bill.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    alert('Cập nhật hóa đơn thành công');
+                    $('#editBillModal').modal('hide');
+                    loadBills();
+                } else {
+                    alert(response.message);
+                }
+            }
+        });
+    }
+
+    function deleteBill(maHoaDon) {
+        if (confirm('Bạn có chắc chắn muốn xóa hóa đơn này?')) {
+            $.post('api/delete_bill.php', { ma_hoa_don: maHoaDon }, function(response) {
+                if (response.success) {
+                    alert('Xóa hóa đơn thành công');
+                    loadBills();
+                } else {
+                    alert(response.message);
+                }
+            });
+        }
+    }
+
+    function formatMoney(amount) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount);
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN');
+    }
+    </script>
+</body>
+</html> 

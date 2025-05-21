@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Yêu Cầu - Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .sidebar .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+        .sidebar .logo-container h3 {
+            color: white;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .sidebar .nav-pills > li > a {
+            color: white;
+            border-radius: 0;
+            padding: 15px 20px;
+        }
+        .sidebar .nav-pills > li.active > a,
+        .sidebar .nav-pills > li.active > a:hover,
+        .sidebar .nav-pills > li.active > a:focus {
+            background-color: #34495e;
+        }
+        .sidebar .nav-pills > li > a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .request-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .request-status {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-cho-xu-ly { background: #f1c40f; color: #fff; }
+        .status-dang-xu-ly { background: #3498db; color: #fff; }
+        .status-da-giai-quyet { background: #2ecc71; color: #fff; }
+        .status-tu-choi { background: #e74c3c; color: #fff; }
+        .request-actions { margin-top: 10px; }
+        .request-actions .btn { margin-right: 5px; }
+        .filter-bar { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="Logo" class="img-responsive">
+                    <h3>Hệ thống quản lý KTX</h3>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Bảng Điều Khiển</a></li>
+                    <li><a href="rooms.html"><i class="fas fa-door-open"></i> Quản lý phòng</a></li>
+                    <li><a href="students.html"><i class="fas fa-user-graduate"></i> Quản lý sinh viên</a></li>
+                    <li><a href="requests.html"><i class="fas fa-tools"></i> Quản lý yêu cầu</a></li>
+                    <li><a href="bills.html"><i class="fas fa-file-invoice-dollar"></i> Quản lý hóa đơn</a></li>
+                    <li><a href="statistics.html"><i class="fas fa-bar-chart"></i> Thống kê</a></li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Đến trang chủ</a></li>
+                </ul>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="page-header">
+                    <h2>Quản Lý Yêu Cầu</h2>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addRequestModal">
+                        <i class="fas fa-plus"></i> Thêm Yêu Cầu
+                    </button>
+                </div>
+                <!-- Filter & Search -->
+                <div class="row filter-bar">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="statusFilter">Trạng thái:</label>
+                            <select class="form-control" id="statusFilter">
+                                <option value="">Tất cả</option>
+                                <option value="chờ xử lý">Chờ xử lý</option>
+                                <option value="đang xử lý">Đang xử lý</option>
+                                <option value="đã giải quyết">Đã giải quyết</option>
+                                <option value="từ chối">Từ chối</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="typeFilter">Loại yêu cầu:</label>
+                            <select class="form-control" id="typeFilter">
+                                <option value="">Tất cả</option>
+                                <option value="đặt phòng">Đặt phòng</option>
+                                <option value="đổi phòng">Đổi phòng</option>
+                                <option value="bảo trì">Bảo trì</option>
+                                <option value="vệ sinh">Vệ sinh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchSV">MSSV/Sinh viên:</label>
+                            <input type="text" class="form-control" id="searchSV" placeholder="Nhập MSSV hoặc tên sinh viên">
+                        </div>
+                        <button type="submit" class="btn btn-default">Lọc</button>
+                    </form>
+                </div>
+                <!-- Request List -->
+                <div class="row" id="requestList">
+                    <!-- Danh sách yêu cầu sẽ được render động bằng AJAX tại đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Request Modal -->
+    <div class="modal fade" id="addRequestModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thêm Yêu Cầu</h4>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="addRequestForm">
+                        <div class="form-group">
+                            <label for="ma_sinh_vien">Sinh viên:</label>
+                            <select class="form-control" id="ma_sinh_vien" name="ma_sinh_vien" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ma_phong">Phòng:</label>
+                            <select class="form-control" id="ma_phong" name="ma_phong" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="loai_yeu_cau">Loại yêu cầu:</label>
+                            <select class="form-control" id="loai_yeu_cau" name="loai_yeu_cau" required>
+                                <option value="đặt phòng">Đặt phòng</option>
+                                <option value="đổi phòng">Đổi phòng</option>
+                                <option value="bảo trì">Bảo trì</option>
+                                <option value="vệ sinh">Vệ sinh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mo_ta">Mô tả:</label>
+                            <textarea class="form-control" id="mo_ta" name="mo_ta" rows="3" required></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Request Modal -->
+    <div class="modal fade" id="editRequestModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sửa Yêu Cầu</h4>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="editRequestForm">
+                        <input type="hidden" name="ma_yeu_cau">
+                        <div class="form-group">
+                            <label for="ma_sinh_vien_edit">Sinh viên:</label>
+                            <select class="form-control" id="ma_sinh_vien_edit" name="ma_sinh_vien" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ma_phong_edit">Phòng:</label>
+                            <select class="form-control" id="ma_phong_edit" name="ma_phong" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="loai_yeu_cau_edit">Loại yêu cầu:</label>
+                            <select class="form-control" id="loai_yeu_cau_edit" name="loai_yeu_cau" required>
+                                <option value="đặt phòng">Đặt phòng</option>
+                                <option value="đổi phòng">Đổi phòng</option>
+                                <option value="bảo trì">Bảo trì</option>
+                                <option value="vệ sinh">Vệ sinh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mo_ta_edit">Mô tả:</label>
+                            <textarea class="form-control" id="mo_ta_edit" name="mo_ta" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="trang_thai_edit">Trạng thái:</label>
+                            <select class="form-control" id="trang_thai_edit" name="trang_thai" required>
+                                <option value="chờ xử lý">Chờ xử lý</option>
+                                <option value="đang xử lý">Đang xử lý</option>
+                                <option value="đã giải quyết">Đã giải quyết</option>
+                                <option value="từ chối">Từ chối</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Load danh sách yêu cầu
+        function loadRequests() {
+            const trang_thai = $('#statusFilter').val();
+            const loai_yeu_cau = $('#typeFilter').val();
+            const search = $('#searchSV').val();
+            $.get('api/list_requests.php', {trang_thai, loai_yeu_cau, search}, function(res) {
+                if(res.success) {
+                    let html = '';
+                    if(res.data.length === 0) {
+                        html = '<div class="col-md-12"><div class="alert alert-info">Không có yêu cầu nào.</div></div>';
+                    } else {
+                        res.data.forEach(function(req) {
+                            let statusClass = 'status-' + req.trang_thai.replace(/\s+/g, '-').replace(/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/g, function(m){return {'à':'a','á':'a','ạ':'a','ả':'a','ã':'a','â':'a','ầ':'a','ấ':'a','ậ':'a','ẩ':'a','ẫ':'a','ă':'a','ằ':'a','ắ':'a','ặ':'a','ẳ':'a','ẵ':'a','è':'e','é':'e','ẹ':'e','ẻ':'e','ẽ':'e','ê':'e','ề':'e','ế':'e','ệ':'e','ể':'e','ễ':'e','ì':'i','í':'i','ị':'i','ỉ':'i','ĩ':'i','ò':'o','ó':'o','ọ':'o','ỏ':'o','õ':'o','ô':'o','ồ':'o','ố':'o','ộ':'o','ổ':'o','ỗ':'o','ơ':'o','ờ':'o','ớ':'o','ợ':'o','ở':'o','ỡ':'o','ù':'u','ú':'u','ụ':'u','ủ':'u','ũ':'u','ư':'u','ừ':'u','ứ':'u','ự':'u','ử':'u','ữ':'u','ỳ':'y','ý':'y','ỵ':'y','ỷ':'y','ỹ':'y','đ':'d'}[m]});
+                            html += `<div class="col-md-12">
+                                <div class="request-card">
+                                    <h4>${req.loai_yeu_cau.charAt(0).toUpperCase() + req.loai_yeu_cau.slice(1)}
+                                        <span class="request-status ${statusClass}">${req.trang_thai.charAt(0).toUpperCase() + req.trang_thai.slice(1)}</span></h4>
+                                    <p><i class='fas fa-user'></i> ${req.ho_ten || ''} (${req.ma_so_sinh_vien || ''})</p>
+                                    <p><i class='fas fa-door-open'></i> Phòng: ${req.so_phong || ''}</p>
+                                    <p><i class='fas fa-align-left'></i> ${req.mo_ta}</p>
+                                    <p><i class='fas fa-calendar'></i> Ngày tạo: ${req.ngay_tao}</p>
+                                    <div class="request-actions">
+                                        <button class="btn btn-sm btn-primary btn-edit" data-id="${req.ma_yeu_cau}"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-sm btn-danger btn-delete" data-id="${req.ma_yeu_cau}"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                    }
+                    $('#requestList').html(html);
+                }
+            }, 'json');
+        }
+        loadRequests();
+        // Lọc yêu cầu
+        $('#statusFilter, #typeFilter').change(function() { loadRequests(); });
+        $('#searchSV').on('input', function() { loadRequests(); });
+        $('.filter-bar form').on('submit', function(e) { e.preventDefault(); loadRequests(); });
+        // Load dropdown sinh viên
+        function loadStudentsDropdown(selector) {
+            $.get('api/list_students.php', function(res) {
+                if(res.success) {
+                    let options = '<option value="">Chọn sinh viên</option>';
+                    res.data.forEach(function(sv) {
+                        options += `<option value="${sv.ma_sinh_vien}">${sv.ho_ten} (${sv.ma_so_sinh_vien})</option>`;
+                    });
+                    $(selector).html(options);
+                }
+            }, 'json');
+        }
+        // Load dropdown phòng
+        function loadRoomsDropdown(selector) {
+            $.get('api/list_rooms.php', function(res) {
+                if(res.success) {
+                    let options = '<option value="">Chọn phòng</option>';
+                    res.data.forEach(function(room) {
+                        options += `<option value="${room.ma_phong}">Phòng ${room.so_phong} (Tầng ${room.floors})</option>`;
+                    });
+                    $(selector).html(options);
+                }
+            }, 'json');
+        }
+        // Khi mở modal thêm yêu cầu
+        $('#addRequestModal').on('show.bs.modal', function() {
+            loadStudentsDropdown('#ma_sinh_vien');
+            loadRoomsDropdown('#ma_phong');
+            $('#addRequestForm')[0].reset();
+        });
+        // Khi mở modal sửa yêu cầu
+        $(document).on('click', '.btn-edit', function() {
+            const id = $(this).data('id');
+            $.get('api/get_request.php', {ma_yeu_cau: id}, function(res) {
+                if(res.success) {
+                    const req = res.data;
+                    loadStudentsDropdown('#ma_sinh_vien_edit');
+                    loadRoomsDropdown('#ma_phong_edit');
+                    setTimeout(function() {
+                        $('#editRequestForm input[name=ma_yeu_cau]').val(req.ma_yeu_cau);
+                        $('#ma_sinh_vien_edit').val(req.ma_sinh_vien);
+                        $('#ma_phong_edit').val(req.ma_phong);
+                        $('#loai_yeu_cau_edit').val(req.loai_yeu_cau);
+                        $('#mo_ta_edit').val(req.mo_ta);
+                        $('#trang_thai_edit').val(req.trang_thai);
+                        $('#editRequestModal').modal('show');
+                    }, 200);
+                }
+            }, 'json');
+        });
+        // Thêm yêu cầu
+        $('#addRequestForm').off('submit').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: 'api/add_request.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res) {
+                    alert(res.message);
+                    if(res.success) {
+                        $('#addRequestModal').modal('hide');
+                        loadRequests();
+                    }
+                }
+            });
+        });
+        // Sửa yêu cầu
+        $('#editRequestForm').off('submit').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: 'api/edit_request.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res) {
+                    alert(res.message);
+                    if(res.success) {
+                        $('#editRequestModal').modal('hide');
+                        loadRequests();
+                    }
+                }
+            });
+        });
+        // Xóa yêu cầu
+        $(document).on('click', '.btn-delete', function() {
+            if(confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')) {
+                const id = $(this).data('id');
+                $.post('api/delete_request.php', {ma_yeu_cau: id}, function(res) {
+                    alert(res.message);
+                    if(res.success) loadRequests();
+                }, 'json');
+            }
+        });
+        // Khi chọn sinh viên trong form thêm yêu cầu, tự động set phòng
+        $('#ma_sinh_vien').on('change', function() {
+            var ma_sv = $(this).val();
+            if(ma_sv) {
+                $.get('api/get_student.php', {ma_sinh_vien: ma_sv}, function(res) {
+                    if(res.success && res.data && res.data.ma_phong) {
+                        $('#ma_phong').val(res.data.ma_phong);
+                    }
+                }, 'json');
+            }
+        });
+    });
+    </script>
+</body>
+</html> 

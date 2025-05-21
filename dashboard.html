@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container-fluid {
+            padding: 0;
+            height: 100%;
+        }
+
+        .row {
+            margin: 0;
+            height: 100%;
+        }
+
+        .sidebar {
+            background-color: var(--primary-color);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 16.666667%;
+            padding-top: 20px;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .sidebar .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+
+        .sidebar .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+
+        .sidebar .logo-container h3 {
+            color: white;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .sidebar .nav-pills {
+            margin-top: 20px;
+        }
+
+        .sidebar .nav-pills > li > a {
+            color: white;
+            border-radius: 0;
+            padding: 15px 20px;
+            transition: background-color 0.3s;
+            margin-bottom: 5px;
+        }
+
+        .sidebar .nav-pills > li.active > a,
+        .sidebar .nav-pills > li.active > a:hover,
+        .sidebar .nav-pills > li.active > a:focus {
+            background-color: var(--secondary-color);
+        }
+
+        .sidebar .nav-pills > li > a:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .main-content {
+            margin-left: 16.666667%;
+            padding: 30px;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+
+        .page-header {
+            margin-top: 0;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .stat-card i {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            margin: 15px 0;
+            font-size: 28px;
+        }
+
+        .stat-card p {
+            color: #666;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-container h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .chart-container canvas {
+            flex: 1;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .recent-activity {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .recent-activity h4 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .activity-time {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="Logo" class="img-responsive">
+                    <h3>Hệ thống quản lý KTX</h3>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Bảng Điều Khiển</a></li>
+                    <li><a href="rooms.html"><i class="fas fa-door-open"></i> Quản lý phòng</a></li>
+                    <li><a href="students.html"><i class="fas fa-user-graduate"></i> Quản lý sinh viên</a></li>
+                    <li><a href="requests.html"><i class="fas fa-tools"></i> Quản lý yêu cầu</a></li>
+                    <li>
+                        <a href="bills.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Quản lý hóa đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="statistics.html">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Thống kê</span>
+                        </a>
+                    </li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Đến trang chủ</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <h2 class="page-header">Bảng Điều Khiển</h2>
+                
+                <!-- Statistics Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card text-center">
+                            <i class="fas fa-door-open text-primary"></i>
+                            <h3 id="totalRooms">...</h3>
+                            <p>Tổng số phòng</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card text-center">
+                            <i class="fas fa-user-graduate text-success"></i>
+                            <h3 id="totalStudents">...</h3>
+                            <p>Sinh viên đang ở</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card text-center">
+                            <i class="fas fa-file-invoice-dollar text-info"></i>
+                            <h3 id="totalBills">...</h3>
+                            <p>Hóa đơn</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card text-center">
+                            <i class="fas fa-tools text-danger"></i>
+                            <h3 id="totalRequests">...</h3>
+                            <p>Yêu cầu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h4>Thống kê sinh viên theo khoa</h4>
+                            <canvas id="studentChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <h4>Tỷ lệ phòng trống/đã cho thuê</h4>
+                            <canvas id="roomChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h4>Hoạt động gần đây</h4>
+                    <!-- Nội dung sẽ được render động bằng JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    $(document).ready(function() {
+        loadDashboardStats();
+        loadStudentChart();
+        loadRoomChart();
+        loadRecentActivity();
+    });
+
+    function loadDashboardStats() {
+        $.get('api/dashboard_stats.php', function(res) {
+            if(res.success) {
+                $("#totalRooms").text(res.data.total_rooms);
+                $("#totalStudents").text(res.data.total_students);
+                $("#totalRequests").text(res.data.total_requests);
+                $("#totalBills").text(res.data.total_bills);
+            }
+        });
+    }
+
+    function loadStudentChart() {
+        $.get('api/dashboard_students_by_faculty.php', function(res) {
+            if(res.success) {
+                var ctx = document.getElementById('studentChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: res.data.labels,
+                        datasets: [{
+                            label: 'Số sinh viên',
+                            data: res.data.values,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            }
+        });
+    }
+
+    function loadRoomChart() {
+        $.get('api/dashboard_rooms_status.php', function(res) {
+            if(res.success) {
+                var ctx = document.getElementById('roomChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: res.data.labels,
+                        datasets: [{
+                            data: res.data.values,
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(255, 99, 132, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        });
+    }
+
+    function loadRecentActivity() {
+        $.get('api/dashboard_recent_activity.php', function(res) {
+            if(res.success) {
+                let html = '';
+                res.data.forEach(item => {
+                    html += `<div class="activity-item">
+                        <i class="${item.icon} ${item.icon_color}"></i>
+                        <span>${item.content}</span>
+                        <span class="activity-time pull-right">${item.time}</span>
+                    </div>`;
+                });
+                $('.recent-activity').html('<h4>Hoạt động gần đây</h4>' + html);
+            }
+        });
+    }
+    </script>
+</body>
+</html> 

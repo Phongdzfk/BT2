@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        :root {
+            --primary-color: #c0392b;    /* PTIT red */
+            --secondary-color: #e74c3c;   /* Light red */
+            --accent-color: #00529b;      /* PTIT blue */
+            --light-red: #ec7063;         /* Softer red */
+            --light-blue: #3498db;        /* Light blue */
+            --ptit-yellow: #f1c40f;       /* PTIT yellow */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-top: -10px;
+        }
+
+        .hero-section {
+            background: url('images/dormitory-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .hero-section .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .section-divider {
+            display: none;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 20px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: var(--ptit-yellow);
+            border-radius: 2px;
+            margin-left: 20px;
+        }
+
+        .section {
+            position: relative;
+            padding: 80px 0;
+            margin-bottom: 50px;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, 
+                transparent 0%, 
+                rgba(192, 57, 43, 0.1) 20%, 
+                rgba(192, 57, 43, 0.1) 80%, 
+                transparent 100%
+            );
+        }
+
+        .section-bg-light {
+            background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+        }
+
+        .section-bg-white {
+            background: white;
+        }
+
+        .features-section {
+            padding-top: 100px;
+            position: relative;
+            background: url('images/room101-3.jpeg') center/cover no-repeat;
+            margin-bottom: 50px;
+        }
+
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1;
+        }
+
+        .features-section .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 30px;
+            margin: 20px 0;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 3px solid var(--primary-color);
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(192, 57, 43, 0.15);
+        }
+
+        .feature-box i {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-box h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .feature-box p {
+            color: #666;
+        }
+
+        .cta-section {
+            padding: 80px 0;
+            margin-top: 0;
+            position: relative;
+            background: url('images/room101-1.jpeg') center/cover no-repeat;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1;
+        }
+
+        .cta-section .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .cta-section p {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .cta-button {
+            background-color: var(--ptit-yellow);
+            color: var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #f39c12;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+            padding: 50px 0;
+            margin-top: 0;
+            position: relative;
+            z-index: 1;
+            color: var(--primary-color);
+            margin-bottom: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            border: 1px solid rgba(192, 57, 43, 0.1);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .stat-item i {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .stat-item h3 {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .navbar {
+            background-color: transparent;
+            transition: all 0.3s ease;
+            padding: 1rem 2rem;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(192, 57, 43, 0.9);  /* Màu đỏ PTIT nhạt hơn với độ trong suốt */
+            box-shadow: 0 2px 20px rgba(192, 57, 43, 0.15);
+            padding: 1rem 2rem;
+            backdrop-filter: blur(8px);  /* Thêm hiệu ứng blur */
+        }
+
+        .navbar.scrolled .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .navbar.scrolled .navbar-brand img {
+            transform: none;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--ptit-yellow);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link:hover {
+            color: var(--ptit-yellow) !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--light-red);
+            border-color: var(--light-red);
+        }
+
+        .gallery-img {
+            border-radius: 15px;
+            transition: 0.3s;
+            cursor: pointer;
+            height: 300px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .gallery-img:hover {
+            transform: scale(1.05);
+        }
+
+        .testimonial-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-img:hover {
+            transform: scale(1.05);
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        footer {
+            background: #a61414;
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('images/background.webp') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        footer h5 {
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p, footer a {
+            position: relative;
+            z-index: 2;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        footer a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 20px;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--ptit-yellow);
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .panel {
+            border: 1px solid rgba(192, 57, 43, 0.1);
+            transition: all 0.3s;
+        }
+
+        .panel:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(192, 57, 43, 0.1);
+        }
+
+        .gallery-section {
+            padding: 80px 0;
+        }
+
+        .news-section {
+            padding: 80px 0;
+        }
+
+        .testimonials-section {
+            padding: 80px 0;
+        }
+
+        .contact-section {
+            padding: 80px 0;
+        }
+
+        .sponsors-section {
+            padding: 80px 0;
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            margin-bottom: 15px;
+        }
+
+        .panel-body {
+            padding: 0;
+        }
+
+        .panel-body .clearfix {
+            padding: 15px 15px 5px;
+        }
+
+        .panel-body h5 {
+            padding: 0 15px;
+        }
+
+        .panel-body p {
+            padding: 0 15px 15px;
+        }
+
+        .panel-body .btn {
+            margin: 0 15px 15px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            height: 100%;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .contact-form .form-control {
+            height: 45px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .contact-form textarea.form-control {
+            flex: 1;
+            min-height: 120px;
+            resize: none;
+        }
+
+        .contact-form button {
+            margin-top: auto;
+        }
+
+        .map-container {
+            height: 100%;
+            min-height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 5px;
+        }
+
+        .sponsor-logo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(192, 57, 43, 0.1);
+        }
+
+        .sponsor-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(192, 57, 43, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .sponsor-logo img {
+            max-height: 80px;
+            width: auto;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+
+        .sponsor-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .collection-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+        }
+
+        .collection-slider {
+            padding: 20px 0;
+        }
+
+        .collection-item {
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .collection-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(192, 57, 43, 0.15);
+        }
+
+        .collection-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .collection-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color) !important;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--primary-color) !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarNav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="images/logo.png" alt="Logo" height="100">
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="nav-link" href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Trang Chủ</a></li>
+                    <li><a class="nav-link" href="#features">Tiện Ích</a></li>
+                    <li><a class="nav-link" href="#gallery">Hình Ảnh</a></li>
+                    <li><a class="nav-link" href="#news">Tin Tức</a></li>
+                    <li><a class="nav-link" href="#testimonials">Đánh Giá</a></li>
+                    <li><a class="nav-link" href="#contact">Liên Hệ</a></li>
+                    <li><a class="nav-link" href="#sponsors">Đối tác</a></li>
+                    <li><a class="nav-link" href="#collection">Bộ sưu tập</a></li>
+                    <li><a class="nav-link btn btn-primary btn-custom text-white" href="login.php">Đăng Nhập</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1>Chào mừng đến với Ký Túc Xá PTIT</h1>
+            <p>Môi trường sống lý tưởng cho sinh viên với đầy đủ tiện nghi và an ninh 24/7</p>
+            <a href="login.php" class="btn btn-primary btn-lg" id="heroButton">Đăng nhập ngay</a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="section features-section section-bg-white" id="features">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Tiện Ích</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>An ninh 24/7</h3>
+                        <p>Hệ thống bảo vệ chuyên nghiệp, camera giám sát khu vực, đảm bảo an toàn cho sinh viên.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-wifi"></i>
+                        <h3>Tiện ích hiện đại</h3>
+                        <p>WiFi tốc độ cao, phòng học chung, khu vực sinh hoạt chung, nhà ăn với giá cả phải chăng.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="fas fa-users"></i>
+                        <h3>Cộng đồng sôi động</h3>
+                        <p>Tham gia các hoạt động ngoại khóa, giao lưu với bạn bè từ nhiều ngành học khác nhau.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats-section section-bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Thống Kê</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <i class="fas fa-building"></i>
+                        <h3>150+</h3>
+                        <p>Phòng ở</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>450+</h3>
+                        <p>Sinh viên</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <i class="fas fa-star"></i>
+                        <h3>4.8/5</h3>
+                        <p>Đánh giá</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <i class="fas fa-smile"></i>
+                        <h3>100%</h3>
+                        <p>Hài lòng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta-section">
+        <div class="container text-center">
+            <h2 class="section-title" data-aos="fade-up">Bạn đã sẵn sàng trải nghiệm cuộc sống tại KTX?</h2>
+            <p class="text-center text-danger" data-aos="fade-up" data-aos-delay="100">Đăng ký ngay hôm nay để trở thành một phần của cộng đồng KTX PTIT</p>
+            <div class="text-center">
+                <a href="login.php" class="cta-button" data-aos="fade-up" data-aos-delay="200">Đăng ký ngay</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section gallery-section section-bg-light" id="gallery">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Hình Ảnh Ký Túc Xá</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="images/room101-1.jpeg" alt="Phòng ở" class="img-fluid gallery-img">
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="images/ptit-banner.jpg" alt="Khu vực chung" class="img-fluid gallery-img">
+                </div>
+                <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="images/phongclc.png" alt="Phòng học" class="img-fluid gallery-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News & Events Section -->
+    <section class="section news-section section-bg-white" id="news">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Tin Tức & Sự Kiện</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <a href="https://ptit.edu.vn/tin-tuc-su-kien/tin-tuc/tin-tuc-chung" style="text-decoration:none;color:inherit;display:block;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img src="images/vanhoa.jpg" class="news-image" alt="Sự kiện văn hóa">
+                                <div class="clearfix mb-2">
+                                    <small class="text-muted pull-left"><i class="far fa-calendar-alt me-2"></i>20/03/2024</small>
+                                    <small class="text-primary pull-right"><i class="fas fa-tag me-2"></i>Sự Kiện</small>
+                                </div>
+                                <h5>Đêm Văn Nghệ Chào Tân Sinh Viên</h5>
+                                <p>Chương trình văn nghệ đặc sắc chào đón tân sinh viên với nhiều tiết mục hấp dẫn...</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-down" data-aos-delay="200">
+                    <a href="https://ptit.edu.vn/tin-tuc-su-kien/tin-tuc/tin-tuc-chung" style="text-decoration:none;color:inherit;display:block;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img src="images/thethao.jpg" class="news-image" alt="Hoạt động thể thao">
+                                <div class="clearfix mb-2">
+                                    <small class="text-muted pull-left"><i class="far fa-calendar-alt me-2"></i>15/03/2024</small>
+                                    <small class="text-primary pull-right"><i class="fas fa-tag me-2"></i>Thể Thao</small>
+                                </div>
+                                <h5>Giải Bóng Đá KTX Mở Rộng</h5>
+                                <p>Giải đấu thường niên với sự tham gia của các đội bóng đến từ các khu KTX...</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <a href="https://ptit.edu.vn/tin-tuc-su-kien/tin-tuc/tin-tuc-chung" style="text-decoration:none;color:inherit;display:block;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <img src="images/hoithao.jpg" class="news-image" alt="Hội thảo">
+                                <div class="clearfix mb-2">
+                                    <small class="text-muted pull-left"><i class="far fa-calendar-alt me-2"></i>10/03/2024</small>
+                                    <small class="text-primary pull-right"><i class="fas fa-tag me-2"></i>Học Tập</small>
+                                </div>
+                                <h5>Workshop Kỹ Năng Mềm</h5>
+                                <p>Chuỗi workshop đào tạo kỹ năng mềm thiết yếu cho sinh viên KTX...</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section section-bg-light" id="testimonials">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Đánh Giá Từ Sinh Viên</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-card text-center">
+                        <img src="images/student1.png" alt="Sinh viên 1" class="testimonial-img">
+                        <h5>Nguyễn Văn A</h5>
+                        <p class="text-muted">Sinh viên năm 3</p>
+                        <p class="mt-3">"KTX thực sự là ngôi nhà thứ hai của mình. Môi trường sống ổn, an ninh tốt và có nhiều bạn mới."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-card text-center">
+                        <img src="images/student2.jpg" alt="Sinh viên 2" class="testimonial-img">
+                        <h5>Trần Thị B</h5>
+                        <p class="text-muted">Sinh viên năm 2</p>
+                        <p class="mt-3">"Cơ sở vật chất hiện đại, đặc biệt là khu vực tự học rất yên tĩnh và tiện nghi."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-card text-center">
+                        <img src="images/students-icon.png" alt="Sinh viên 3" class="testimonial-img">
+                        <h5>Lê Văn C</h5>
+                        <p class="text-muted">Sinh viên năm 4</p>
+                        <p class="mt-3">"Các hoạt động ngoại khóa phong phú giúp mình có thêm nhiều kỹ năng và kết bạn mới."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section section-bg-white" id="contact">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Đặt Phòng Ký Túc Xá</h2>
+            <div class="row" style="min-height: 500px;">
+                <div class="col-md-6" data-aos="fade-right" style="height: 500px;">
+                    <div class="contact-form">
+                        <p class="mb-4">Vui lòng đăng nhập để đặt phòng ký túc xá. Sau khi đăng nhập, bạn có thể chọn loại phòng, tòa, phòng còn trống và ngày ở/ngày đi.</p>
+                        <form id="bookingForm">
+                            <div class="form-group">
+                                <label for="roomType">Loại phòng</label>
+                                <select class="form-control" id="roomType" name="roomType" required>
+                                    <option value="">Chọn loại phòng</option>
+                                    <option value="2">2 người</option>
+                                    <option value="4">4 người</option>
+                                    <option value="6">6 người</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ktx">Tòa/Ký túc xá</label>
+                                <select class="form-control" id="ktx" name="ktx" required>
+                                    <option value="">Chọn tòa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="room">Phòng còn trống</label>
+                                <select class="form-control" id="room" name="room" required>
+                                    <option value="">Chọn phòng</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkin">Ngày ở</label>
+                                <input type="date" class="form-control" id="checkin" name="checkin" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="checkout">Ngày đi</label>
+                                <input type="date" class="form-control" id="checkout" name="checkout" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Đặt phòng</button>
+                        </form>
+                        <div id="bookingMsg"></div>
+                    </div>
+                </div>
+                <div class="col-md-6" data-aos="fade-left" style="height: 500px;">
+                    <div class="map-container" style="height: 100%;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3725.2924025474867!2d105.78254558148046!3d20.980912930780597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135accdd8a1ad71%3A0xa2f9b16036648187!2zSOG7jWMgdmnhu4duIEPDtG5nIG5naOG7hyBCxrB1IGNow61uaCB2aeG7hW4gdGjDtG5n!5e0!3m2!1svi!2s!4v1744863931873!5m2!1svi!2s" style="border:0; width: 100%; height: 100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors Section -->
+    <section class="section sponsors-section section-bg-light" id="sponsors">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-down">Đối tác</h2>
+            <div class="row text-center">
+                <div class="col-xs-6 col-md-3 mb-4" data-aos="fade-right" data-aos-delay="100">
+                    <a href="https://www.samsung.com/vn/" target="_blank" style="display:block;text-decoration:none;">
+                        <div class="sponsor-logo">
+                            <img src="images/samsung.png" alt="Samsung" class="img-responsive" style="max-height: 60px;">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3 mb-4" data-aos="fade-right" data-aos-delay="200">
+                    <a href="https://www.navercorp.com/" target="_blank" style="display:block;text-decoration:none;">
+                        <div class="sponsor-logo">
+                            <img src="images/naver.png" alt="Naver" class="img-responsive" style="max-height: 60px;">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3 mb-4" data-aos="fade-left" data-aos-delay="300">
+                    <a href="https://fpt.com.vn/" target="_blank" style="display:block;text-decoration:none;">
+                        <div class="sponsor-logo">
+                            <img src="images/fpt.jpg" alt="FPT" class="img-responsive" style="max-height: 60px;">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-xs-6 col-md-3 mb-4" data-aos="fade-left" data-aos-delay="400">
+                    <a href="https://ptit.edu.vn/" target="_blank" style="display:block;text-decoration:none;">
+                        <div class="sponsor-logo">
+                            <img src="images/logo.png" alt="PTIT" class="img-responsive" style="max-height: 60px;">
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collection Section -->
+    <section class="section collection-section" id="collection">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Bộ Sưu Tập</h2>
+            <div class="swiper collection-slider" data-aos="fade-up">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/room101-1.jpeg" alt="Collection 1">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/room101-2.jpeg" alt="Collection 2">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/room101-3.jpeg" alt="Collection 3">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/phongclc.png" alt="Collection 4">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/ptit-banner.jpg" alt="Collection 5">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/vanhoa.jpg" alt="Collection 6">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/thethao.jpg" alt="Collection 7">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/dormitory-banner.jpg" alt="Collection 8">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/background.webp" alt="Collection 9">
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <div class="collection-item">
+                            <img src="images/samsung.png" alt="Collection 10">
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Số điện thoại liên hệ</h5>
+                    <p>024 3756 2186</p>
+                    <h5 class="mt-4">Email</h5>
+                    <p>ctsv@ptit.edu.vn</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Trụ sở chính</h5>
+                    <p>122 Hoàng Quốc Việt, Q. Cầu Giấy, Hà Nội</p>
+                    <h5 class="mt-4">Cơ sở đào tạo tại Hà Nội</h5>
+                    <p>Km10, Đường Nguyễn Trãi, Q. Hà Đông, Hà Nội</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Học viện cơ sở tại TP. Hồ Chí Minh</h5>
+                    <p>11 Nguyễn Đình Chiểu, P. Đa Kao, Q.1 TP Hồ Chí Minh</p>
+                    <h5 class="mt-4">Cơ sở đào tạo tại TP Hồ Chí Minh</h5>
+                    <p>Đường Man Thiện, P. Hiệp Phú, Q.9 TP Hồ Chí Minh</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Đường dẫn liên kết</h5>
+                    <p><a href="#">Bộ Khoa học và Công nghệ</a></p>
+                    <p><a href="#">Học viện Cơ sở TP. Hồ Chí Minh</a></p>
+                    <p><a href="#">Viện Khoa học Kỹ thuật Bưu điện</a></p>
+                    <p><a href="#">Viện Kinh tế Bưu điện</a></p>
+                    <p><a href="#">Viện Công nghệ Thông tin và Truyền thông CDIT</a></p>
+                    <p><a href="#">Cổng thông tin Đào tạo</a></p>
+                    <p><a href="#">Cổng thông tin Khoa học Công nghệ</a></p>
+                    <p><a href="#">Cổng thông tin Hợp tác quốc tế</a></p>
+                </div>
+            </div>
+            <div class="social-links text-right">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="footer-copyright text-center mt-4">
+                © Copyright 2024 HocVienCongNgheBuuChinhVienThong, All rights reserved ® Học viện Công nghệ Bưu chính Viễn thông giữ bản quyền nội dung trên website này
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Navbar scroll effect
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        $('a[href^="#"]').on('click', function(e) {
+            e.preventDefault();
+            var target = $(this.hash);
+            $('html, body').animate({
+                scrollTop: target.offset().top - 100
+            }, 1000);
+        });
+
+        // Check login status
+        $(document).ready(function() {
+            $.ajax({
+                url: 'api/check_login.php',
+                type: 'GET',
+                success: function(response) {
+                    if(response.loggedin) {
+                        // Replace login button with welcome message and dropdown
+                        $('.navbar-right li:last-child').html(`
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown" style="text-decoration: none; line-height: 50px;">
+                                    <i class="fas fa-user"></i> Xin chào, ${response.username}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a href="api/logout.php"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                                </ul>
+                            </div>
+                        `);
+
+                        // Change hero section button to YouTube link
+                        $('#heroButton')
+                            .attr('href', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
+                            .attr('target', '_blank')
+                            .html('<i class="fab fa-youtube"></i> Xem video giới thiệu');
+
+                        // Change CTA section button
+                        $('.cta-button')
+                            .attr('href', 'https://ptit.edu.vn')
+                            .attr('target', '_blank')
+                            .html('<i class="fas fa-university"></i> Tìm hiểu thêm')
+                            .addClass('btn-primary')
+                            .removeClass('cta-button')
+                            .css({
+                                'padding': '12px 25px',
+                                'border-radius': '30px',
+                                'font-size': '16px',
+                                'font-weight': '500',
+                                'display': 'inline-flex',
+                                'align-items': 'center',
+                                'gap': '10px'
+                            });
+                    }
+                }
+            });
+        });
+
+        // Initialize Swiper
+        const collectionSwiper = new Swiper('.collection-slider', {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 10
+                },
+                480: {
+                    slidesPerView: 2,
+                    spaceBetween: 15
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 15
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 20
+                }
+            }
+        });
+
+        $(document).ready(function() {
+            $.get('api/dashboard_stats.php', function(res) {
+                if(res.success) {
+                    // Thay đổi số phòng
+                    $('.stat-item i.fa-building').parent().find('h3').text(res.data.total_rooms);
+                    // Thay đổi số sinh viên
+                    $('.stat-item i.fa-user-graduate').parent().find('h3').text(res.data.total_students);
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            // Lấy danh sách tòa
+            function loadKTX() {
+                $.get('api/list_ktx.php', function(res) {
+                    if(res.success) {
+                        let html = '<option value="">Chọn tòa</option>';
+                        res.data.forEach(function(ktx) {
+                            html += `<option value="${ktx.ma_ktx}">${ktx.ten_ktx}</option>`;
+                        });
+                        $('#ktx').html(html);
+                    }
+                }, 'json');
+            }
+            loadKTX();
+
+            // Lấy danh sách phòng còn trống theo loại phòng và tòa
+            function loadAvailableRooms() {
+                const suc_chua = $('#roomType').val();
+                const ma_ktx = $('#ktx').val();
+                $.get('api/list_available_rooms.php', function(res) {
+                    if(res.success) {
+                        let html = '<option value="">Chọn phòng</option>';
+                        res.data.forEach(function(room) {
+                            if((!suc_chua || room.suc_chua == suc_chua) && (!ma_ktx || room.ma_ktx == ma_ktx)) {
+                                html += `<option value="${room.ma_phong}">Phòng ${room.so_phong} (Tầng ${room.floors}, ${room.suc_chua} người)</option>`;
+                            }
+                        });
+                        $('#room').html(html);
+                    }
+                }, 'json');
+            }
+            $('#roomType, #ktx').on('change', loadAvailableRooms);
+            // Khi vào trang, load phòng luôn nếu có sẵn
+            loadAvailableRooms();
+
+            // Kiểm tra đăng nhập
+            let ma_sinh_vien = null;
+            $.get('api/check_login.php', function(res) {
+                if(!res.loggedin) {
+                    $('#bookingForm :input').prop('disabled', true);
+                    $('#bookingMsg').html('<div class="alert alert-warning">Vui lòng <a href="login.php">đăng nhập</a> để đặt phòng!</div>');
+                } else {
+                    // Lấy mã sinh viên theo tên đăng nhập
+                    $.get('api/list_students.php', function(res2) {
+                        if(res2.success && res2.data.length > 0) {
+                            // Tìm sinh viên có tên đăng nhập trùng với session
+                            let sv = res2.data.find(sv => sv.ho_ten === res.username);
+                            if(sv) ma_sinh_vien = sv.ma_sinh_vien;
+                        }
+                    }, 'json');
+                }
+            }, 'json');
+
+            // Submit form đặt phòng
+            $('#bookingForm').on('submit', function(e) {
+                e.preventDefault();
+                $('#bookingMsg').html('');
+                if(!ma_sinh_vien) {
+                    $('#bookingMsg').html('<div class="alert alert-danger">Không xác định được mã sinh viên. Vui lòng đăng nhập lại!</div>');
+                    return;
+                }
+                const ma_phong = $('#room').val();
+                const checkin = $('#checkin').val();
+                const checkout = $('#checkout').val();
+                const mo_ta = `Đặt phòng từ trang chủ. Ngày ở: ${checkin}, Ngày đi: ${checkout}`;
+                $.ajax({
+                    url: 'api/add_request.php',
+                    type: 'POST',
+                    data: {
+                        ma_sinh_vien: ma_sinh_vien,
+                        ma_phong: ma_phong,
+                        loai_yeu_cau: 'đặt phòng',
+                        mo_ta: mo_ta
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if(res.success) {
+                            $('#bookingMsg').html('<div class="alert alert-success">'+res.message+'</div>');
+                            $('#bookingForm')[0].reset();
+                        } else {
+                            $('#bookingMsg').html('<div class="alert alert-danger">'+res.message+'</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#bookingMsg').html('<div class="alert alert-danger">Lỗi hệ thống!</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sinh Viên - Ký Túc Xá PTIT</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sidebar {
+            background-color: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .sidebar .logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            margin: 0 auto 10px auto;
+            display: block;
+        }
+        .sidebar .logo-container h3 {
+            color: white;
+            font-size: 16px;
+            margin: 0;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        .sidebar .nav-pills > li > a {
+            color: white;
+            border-radius: 0;
+            padding: 15px 20px;
+        }
+        .sidebar .nav-pills > li.active > a,
+        .sidebar .nav-pills > li.active > a:hover,
+        .sidebar .nav-pills > li.active > a:focus {
+            background-color: #34495e;
+        }
+        .sidebar .nav-pills > li > a:hover {
+            background-color: #34495e;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .student-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: flex-start;
+        }
+        .student-img-container {
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #f5f5f5;
+            margin-right: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .student-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .student-info {
+            flex: 1;
+        }
+        .student-actions {
+            margin-top: 10px;
+        }
+        .student-actions .btn {
+            margin-right: 5px;
+        }
+        .filter-bar {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="Logo" class="img-responsive">
+                    <h3>Hệ thống quản lý KTX</h3>
+                </div>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Bảng Điều Khiển</a></li>
+                    <li><a href="rooms.html"><i class="fas fa-door-open"></i> Quản lý phòng</a></li>
+                    <li class="active"><a href="students.html"><i class="fas fa-user-graduate"></i> Quản lý sinh viên</a></li>
+                    <li><a href="requests.html"><i class="fas fa-tools"></i> Quản lý yêu cầu</a></li>
+                    <li>
+                        <a href="bills.html">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <span>Quản lý hóa đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="statistics.html">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Thống kê</span>
+                        </a>
+                    </li>
+                    <li><a href="index.html"><i class="fas fa-sign-out-alt"></i> Đến trang chủ</a></li>
+                </ul>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <div class="page-header">
+                    <h2>Quản Lý Sinh Viên</h2>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">
+                        <i class="fas fa-plus"></i> Thêm Sinh Viên
+                    </button>
+                </div>
+                <!-- Filter & Search -->
+                <div class="row filter-bar">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="roomFilter">Phòng:</label>
+                            <select class="form-control" id="roomFilter">
+                                <option value="">Tất cả</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchMSSV">MSSV:</label>
+                            <input type="text" class="form-control" id="searchMSSV" placeholder="Nhập mã số sinh viên">
+                        </div>
+                        <button type="submit" class="btn btn-default">Lọc</button>
+                    </form>
+                </div>
+                <!-- Student List -->
+                <div class="row" id="studentList">
+                    <!-- Danh sách sinh viên sẽ được render động bằng AJAX tại đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Student Modal -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thêm Sinh Viên</h4>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="addStudentForm">
+                        <h4>Thông tin tài khoản</h4>
+                        <div class="form-group">
+                            <label for="ten_dang_nhap">Tên đăng nhập:</label>
+                            <input type="text" class="form-control" id="ten_dang_nhap" name="ten_dang_nhap" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mat_khau">Mật khẩu:</label>
+                            <input type="password" class="form-control" id="mat_khau" name="mat_khau" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ho_ten">Họ tên:</label>
+                            <input type="text" class="form-control" id="ho_ten" name="ho_ten" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="so_dien_thoai">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="so_dien_thoai" name="so_dien_thoai">
+                        </div>
+                        <hr>
+                        <h4>Thông tin sinh viên</h4>
+                        <div class="form-group">
+                            <label for="ma_so_sinh_vien">Mã số sinh viên:</label>
+                            <input type="text" class="form-control" id="ma_so_sinh_vien" name="ma_so_sinh_vien" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_sinh">Ngày sinh:</label>
+                            <input type="date" class="form-control" id="ngay_sinh" name="ngay_sinh" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gioi_tinh">Giới tính:</label>
+                            <select class="form-control" id="gioi_tinh" name="gioi_tinh" required>
+                                <option value="nam">Nam</option>
+                                <option value="nữ">Nữ</option>
+                                <option value="khác">Khác</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_vao">Ngày vào:</label>
+                            <input type="date" class="form-control" id="ngay_vao" name="ngay_vao" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_ra">Ngày ra:</label>
+                            <input type="date" class="form-control" id="ngay_ra" name="ngay_ra">
+                        </div>
+                        <div class="form-group">
+                            <label for="ma_phong">Phòng:</label>
+                            <select class="form-control" id="ma_phong" name="ma_phong" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="anh_sinh_vien">Ảnh sinh viên:</label>
+                            <input type="file" class="form-control" id="anh_sinh_vien" name="anh_sinh_vien" accept="image/*">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Student Modal -->
+    <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Sửa Thông Tin Sinh Viên</h4>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data" id="editStudentForm">
+                        <input type="hidden" name="ma_sinh_vien">
+                        <div class="form-group">
+                            <label for="ma_so_sinh_vien_edit">Mã số sinh viên:</label>
+                            <input type="text" class="form-control" id="ma_so_sinh_vien_edit" name="ma_so_sinh_vien" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_sinh_edit">Ngày sinh:</label>
+                            <input type="date" class="form-control" id="ngay_sinh_edit" name="ngay_sinh" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="gioi_tinh_edit">Giới tính:</label>
+                            <select class="form-control" id="gioi_tinh_edit" name="gioi_tinh" required>
+                                <option value="nam">Nam</option>
+                                <option value="nữ">Nữ</option>
+                                <option value="khác">Khác</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_vao_edit">Ngày vào:</label>
+                            <input type="date" class="form-control" id="ngay_vao_edit" name="ngay_vao" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="ngay_ra_edit">Ngày ra:</label>
+                            <input type="date" class="form-control" id="ngay_ra_edit" name="ngay_ra">
+                        </div>
+                        <div class="form-group">
+                            <label for="anh_sinh_vien_edit">Ảnh sinh viên:</label>
+                            <input type="file" class="form-control" id="anh_sinh_vien_edit" name="anh_sinh_vien" accept="image/*">
+                        </div>
+                        <input type="hidden" name="anh_sinh_vien_old">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Load danh sách phòng vào filter và form
+        function loadRoomsDropdown() {
+            $.get('api/list_rooms.php', function(res) {
+                if(res.success) {
+                    let options = '<option value="">Tất cả</option>';
+                    let optionsForm = '<option value="">Chọn phòng</option>';
+                    res.data.forEach(function(room) {
+                        options += `<option value="${room.ma_phong}">Phòng ${room.so_phong} (Tầng ${room.floors})</option>`;
+                        optionsForm += `<option value="${room.ma_phong}">Phòng ${room.so_phong} (Tầng ${room.floors})</option>`;
+                    });
+                    $('#roomFilter').html(options);
+                    $('#ma_phong').html(optionsForm);
+                    $('#ma_phong_edit').html(optionsForm);
+                }
+            }, 'json');
+        }
+        loadRoomsDropdown();
+
+        // Load danh sách sinh viên
+        function loadStudents() {
+            const ma_phong = $('#roomFilter').val();
+            const mssv = $('#searchMSSV').val();
+            $.get('api/list_students.php', {ma_phong: ma_phong, ma_so_sinh_vien: mssv}, function(res) {
+                if(res.success) {
+                    let html = '';
+                    if(res.data.length === 0) {
+                        html = '<div class="col-md-12"><div class="alert alert-info">Không có sinh viên nào.</div></div>';
+                    } else {
+                        res.data.forEach(function(sv) {
+                            html += `<div class="col-md-6">
+                                <div class="student-card">
+                                    <div class="student-img-container">
+                                        <img src="images/${sv.anh_sinh_vien || 'default-avatar.png'}" alt="Ảnh sinh viên" class="student-img">
+                                    </div>
+                                    <div class="student-info">
+                                        <h4>${sv.ho_ten || ''} (${sv.ma_so_sinh_vien})</h4>
+                                        <p><i class='fas fa-venus-mars'></i> ${sv.gioi_tinh.charAt(0).toUpperCase() + sv.gioi_tinh.slice(1)}</p>
+                                        <p><i class='fas fa-birthday-cake'></i> ${sv.ngay_sinh}</p>
+                                        <p><i class='fas fa-door-open'></i> Phòng: ${sv.so_phong || ''}</p>
+                                        <p><i class='fas fa-calendar-plus'></i> Vào: ${sv.ngay_vao}</p>
+                                        <p><i class='fas fa-calendar-minus'></i> Ra: ${sv.ngay_ra || '-'}</p>
+                                        <p><i class='fas fa-envelope'></i> ${sv.email || ''}</p>
+                                        <p><i class='fas fa-phone'></i> ${sv.so_dien_thoai || ''}</p>
+                                        <div class="student-actions">
+                                            <button class="btn btn-sm btn-primary btn-edit" data-id="${sv.ma_sinh_vien}"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-sm btn-danger btn-delete" data-id="${sv.ma_sinh_vien}"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        });
+                    }
+                    $('#studentList').html(html);
+                }
+            }, 'json');
+        }
+        loadStudents();
+
+        // Lọc sinh viên
+        $('#roomFilter').change(function() {
+            loadStudents();
+        });
+        $('#searchMSSV').on('input', function() {
+            loadStudents();
+        });
+        $('.filter-bar form').on('submit', function(e) {
+            e.preventDefault();
+            loadStudents();
+        });
+
+        // Load danh sách phòng còn trống cho form thêm/sửa sinh viên
+        function loadAvailableRoomsDropdown(selector) {
+            $.get('api/list_available_rooms.php', function(res) {
+                if(res.success) {
+                    let options = '<option value="">Chọn phòng</option>';
+                    res.data.forEach(function(room) {
+                        options += `<option value="${room.ma_phong}">Phòng ${room.so_phong} (Tầng ${room.floors})</option>`;
+                    });
+                    $(selector).html(options);
+                }
+            }, 'json');
+        }
+        // Khi mở modal thêm sinh viên
+        $('#addStudentModal').on('show.bs.modal', function() {
+            loadAvailableRoomsDropdown('#ma_phong');
+            $('#addStudentForm')[0].reset();
+        });
+        // Khi mở modal sửa sinh viên
+        $('#editStudentModal').on('show.bs.modal', function() {
+            loadAvailableRoomsDropdown('#ma_phong_edit');
+        });
+
+        // Thêm sinh viên
+        $('#addStudentForm').off('submit').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: 'api/add_student.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res) {
+                    alert(res.message);
+                    if(res.success) {
+                        $('#addStudentModal').modal('hide');
+                        $('#addStudentForm')[0].reset();
+                        loadStudents();
+                    }
+                }
+            });
+        });
+
+        // Mở modal sửa sinh viên
+        $(document).on('click', '.btn-edit', function() {
+            const id = $(this).data('id');
+            $.get('api/get_student.php', {ma_sinh_vien: id}, function(res) {
+                if(res.success) {
+                    const sv = res.data;
+                    $('#editStudentForm input[name=ma_sinh_vien]').val(sv.ma_sinh_vien);
+                    $('#ma_so_sinh_vien_edit').val(sv.ma_so_sinh_vien);
+                    $('#ngay_sinh_edit').val(sv.ngay_sinh);
+                    $('#gioi_tinh_edit').val(sv.gioi_tinh);
+                    $('#ngay_vao_edit').val(sv.ngay_vao);
+                    $('#ngay_ra_edit').val(sv.ngay_ra);
+                    $('#editStudentForm input[name=anh_sinh_vien_old]').val(sv.anh_sinh_vien);
+                    $('#editStudentModal').modal('show');
+                }
+            }, 'json');
+        });
+
+        // Sửa sinh viên
+        $('#editStudentForm').off('submit').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: 'api/edit_student.php',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res) {
+                    alert(res.message);
+                    if(res.success) {
+                        $('#editStudentModal').modal('hide');
+                        loadStudents();
+                    }
+                }
+            });
+        });
+
+        // Xóa sinh viên
+        $(document).on('click', '.btn-delete', function() {
+            if(confirm('Bạn có chắc chắn muốn xóa sinh viên này?')) {
+                const id = $(this).data('id');
+                $.post('api/delete_student.php', {ma_sinh_vien: id}, function(res) {
+                    alert(res.message);
+                    if(res.success) loadStudents();
+                }, 'json');
+            }
+        });
+    });
+    </script>
+</body>
+</html> 
