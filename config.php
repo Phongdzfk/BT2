@@ -1,7 +1,7 @@
 <?php
-$host = 'localhost:3307';  // thêm cổng 3307
-$dbname = 'dormitory_db';  // tên database bạn đã tạo
-$username = 'root';  // username mặc định của MySQL
+$host = '';  // thêm cổng 3307
+$dbname = '';  // tên database bạn đã tạo
+$username = '';  // username mặc định của MySQL
 $password = '';  // không có mật khẩu
 
 try {
